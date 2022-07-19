@@ -1,50 +1,55 @@
 import { MemoryRouter as Router, Routes, Route } from 'react-router-dom';
-import icon from '../../assets/icon.svg';
-import './App.css';
-
-const Hello = () => {
-  return (
-    <div>
-      <div className="Hello">
-        <img width="200px" alt="icon" src={icon} />
-      </div>
-      <h1>electron-react-boilerplate</h1>
-      <div className="Hello">
-        <a
-          href="https://electron-react-boilerplate.js.org/"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              📚
-            </span>
-            Read our docs
-          </button>
-        </a>
-        <a
-          href="https://github.com/sponsors/electron-react-boilerplate"
-          target="_blank"
-          rel="noreferrer"
-        >
-          <button type="button">
-            <span role="img" aria-label="books">
-              🙏
-            </span>
-            Donate
-          </button>
-        </a>
-      </div>
-    </div>
-  );
-};
+import Rekognize from './pages/rekognize/Rekognize';
+import { Center, ChakraProvider } from '@chakra-ui/react';
+import Rekognizing from './pages/rekognizing/Rekognizing';
+import { RekognitionContext, RekognitionDispatchContext } from './contexts/RekognitionContext';
+import { useReducer } from 'react';
+import { IRekognitionState } from './interfaces/interfaces';
 
 export default function App() {
+
+  const [rekognitionState, rekognitionDispatch] = useReducer(rekognitionReducer, initialRekognitionState);
   return (
-    <Router>
-      <Routes>
-        <Route path="/" element={<Hello />} />
-      </Routes>
-    </Router>
+    <ChakraProvider>
+      <Center h="100vh" w="100vw">
+        <RekognitionContext.Provider value={rekognitionState}>
+          <RekognitionDispatchContext.Provider value={rekognitionDispatch}>
+          <Router>
+            <Routes>
+              <Route path="/" element={<Rekognize />} />
+              <Route path="rekognizing" element={<Rekognizing />} />
+            </Routes>
+          </Router>
+          </RekognitionDispatchContext.Provider>
+        </RekognitionContext.Provider>
+      </Center>
+    </ChakraProvider>
   );
+}
+
+function rekognitionReducer(files, action): IRekognitionState {
+  switch(action.type) {
+    case 'files_selected': {
+      return {
+        files: [...files]
+      };
+    }
+    case 'rekognition_finish': {
+      return {
+        files: [...files]
+      };
+    }
+    case 'rekognition_cancel': {
+      return {
+        files: [...files]
+      };
+    }
+    default: {
+      throw Error('Unknown action: ' + action.type);
+    }
+  }
+}
+
+const initialRekognitionState: IRekognitionState = {
+  files: [],
 }

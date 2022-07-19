@@ -1,21 +1,8 @@
-import { contextBridge, ipcRenderer, IpcRendererEvent } from 'electron';
+import { contextBridge, ipcRenderer } from 'electron';
+import { IAWSCredentials } from '../interfaces';
 
-export type Channels = 'ipc-example';
-
+/* API Accesible via window.electron */
 contextBridge.exposeInMainWorld('electron', {
-  ipcRenderer: {
-    sendMessage(channel: Channels, args: unknown[]) {
-      ipcRenderer.send(channel, args);
-    },
-    on(channel: Channels, func: (...args: unknown[]) => void) {
-      const subscription = (_event: IpcRendererEvent, ...args: unknown[]) =>
-        func(...args);
-      ipcRenderer.on(channel, subscription);
-
-      return () => ipcRenderer.removeListener(channel, subscription);
-    },
-    once(channel: Channels, func: (...args: unknown[]) => void) {
-      ipcRenderer.once(channel, (_event, ...args) => func(...args));
-    },
-  },
+  setAWSCredentials: (credentials: IAWSCredentials) => ipcRenderer.send('aws:set-credentials', credentials),
+  getAWSCredentials: () => ipcRenderer.invoke('aws:get-credentials'),
 });
