@@ -1,17 +1,16 @@
 import { Container, List, ListIcon, ListItem } from '@chakra-ui/react';
 import DropFileInput from 'renderer/components/drop-file-input/DropFileInput';
 import { Button } from '@chakra-ui/react';
-import { useContext, useState } from 'react';
 import { VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { Image } from 'react-feather';
-import { RekognitionContext, RekognitionDispatchContext } from 'renderer/contexts/RekognitionContext';
+import { useDispatch, useSelector } from 'react-redux';
+import { selectFiles, updateFiles } from '../../store';
 
 const Rekognize = () => {
   const navigate = useNavigate();
-  const rekognitionState = useContext(RekognitionContext);
-  const rekognitionDispatch = useContext(RekognitionDispatchContext);
-  const [files, setFiles] = useState<Array<{ id: number; name: string }>>([]);
+  const dispatch = useDispatch();
+  const files = useSelector(selectFiles);
 
   function onFileInputChange(event): void {
     const { files } = event.target;
@@ -21,11 +20,12 @@ const Rekognize = () => {
       files[i].id = i;
       _files.push(files[i]);
     }
-    setFiles(_files);
+    dispatch(updateFiles(_files));
   }
 
   function onRekognize(): void {
-    navigate('rekognizing');
+    // rekognize()
+    // navigate('rekognizing');
   }
 
   const listFiles = files.map((file) => (
