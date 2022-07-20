@@ -5,22 +5,28 @@ import { VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import { Image } from 'react-feather';
 import { useDispatch, useSelector } from 'react-redux';
-import { selectFiles, updateFiles } from '../../store';
+import * as store from '../../store';
+import { IRekognitionFile } from 'renderer/interfaces/interfaces';
 
 const Rekognize = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const files = useSelector(selectFiles);
+  const files = useSelector(store.selectFiles);
 
   function onFileInputChange(event): void {
+    dispatch(store.cancelRekognition());
     const { files } = event.target;
-    let _files = [];
-    // Add ids for react map key
+    let _files: IRekognitionFile[] = [];
+    // Extract some props from files to make it serializable for storing in state
     for (let i = 0; i < files.length; i++) {
-      files[i].id = i;
-      _files.push(files[i]);
+      _files.push({
+        id: i,
+        name: files[i].name,
+        path: files[i].path,
+        numbers: [],
+      });
     }
-    dispatch(updateFiles(_files));
+    dispatch(store.updateFiles(_files));
   }
 
   function onRekognize(): void {
@@ -41,12 +47,14 @@ const Rekognize = () => {
         <DropFileInput onFileInputChange={onFileInputChange} />
       </Container>
       {files.length && true && (
-        <Container>
-          <List spacing={3}>{listFiles}</List>
+        <>
+          <Container maxHeight="600px" overflow="auto">
+            <List>{listFiles}</List>
+          </Container>
           <Button colorScheme="blue" onClick={onRekognize}>
             Rekognize!
           </Button>
-        </Container>
+        </>
       )}
     </VStack>
   );

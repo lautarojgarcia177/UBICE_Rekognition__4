@@ -4,18 +4,29 @@ import { configureStore, createSlice } from '@reduxjs/toolkit';
 export const filesSlice = createSlice({
   name: 'files',
   initialState: {
-    files: []
+    files: [],
+    isRekognizing: false,
   },
   reducers: {
-    updateFiles: (state, action) => state.files = action.payload
-  }
+    updateFiles: (state, action) => {
+      state.files = action.payload;
+    },
+    startRekognition: (state) => {
+      state.isRekognizing = true;
+    },
+    cancelRekognition: (state) => {
+      state.isRekognizing = false;
+    },
+  },
 });
 
 /* Actions */
-export const { updateFiles } = filesSlice.actions;
+export const { updateFiles, startRekognition, cancelRekognition } =
+  filesSlice.actions;
 
 /* Selectors */
-export const selectFiles = state => state.files.files;
+export const selectFiles = (state) => state.files.files;
+export const selectIsRekognizing = (state) => state.files.isRekognizing;
 
 /* Thunks */
 
