@@ -1,12 +1,19 @@
 import { Progress } from '@chakra-ui/react';
 import { Button } from '@chakra-ui/react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import * as store from '../../store';
+import { useSelector } from 'react-redux';
 
 const Rekognizing = () => {
   const navigate = useNavigate();
   const [rekognitionProgress, setRekognitionProgress] = useState(0);
+  const files = useSelector(store.selectFiles);
+
+  useEffect(() => {
+
+  }, []);
 
   function onRekognizeCancel(): void {
     navigate('/');

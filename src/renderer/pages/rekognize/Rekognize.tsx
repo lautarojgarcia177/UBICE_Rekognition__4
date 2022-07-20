@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 import { Image } from 'react-feather';
 import { useDispatch, useSelector } from 'react-redux';
 import * as store from '../../store';
-import { IRekognitionFile } from 'renderer/interfaces/interfaces';
+import { IRekognitionFile } from 'interfaces';
 
 const Rekognize = () => {
   const navigate = useNavigate();
@@ -30,8 +30,7 @@ const Rekognize = () => {
   }
 
   function onRekognize(): void {
-    // rekognize()
-    // navigate('rekognizing');
+    navigate('rekognizing');
   }
 
   const listFiles = files.map((file) => (

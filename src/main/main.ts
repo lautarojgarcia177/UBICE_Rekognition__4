@@ -14,11 +14,7 @@ import { autoUpdater } from 'electron-updater';
 import log from 'electron-log';
 import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
-import {
-  setAWSCredentials,
-  getAWSCredentials,
-} from '../services/store.service';
-import { IAWSCredentials } from '../interfaces';
+import { addIpcMainListeners__RendererToMain, addIpcMainListeners__TwoWay } from './ipc.main';
 
 class AppUpdater {
   constructor() {
@@ -80,10 +76,7 @@ const createWindow = async () => {
     },
   });
 
-  // IPC Renderer to main (one-way)
-  ipcMain.on('aws:set-credentials', (_event, credentials: IAWSCredentials) => {
-    setAWSCredentials(credentials);
-  });
+  addIpcMainListeners__RendererToMain(ipcMain);
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
@@ -137,14 +130,6 @@ app
       // dock icon is clicked and there are no other windows open.
       if (mainWindow === null) createWindow();
     });
-
-    // Two way ipc with ipcMain.handle, one way from renderer to main with ipcMain.on
-    // Docs: https://www.electronjs.org/docs/latest/tutorial/ipc#pattern-2-renderer-to-main-two-way
-    ipcMain.handle('aws:get-credentials', () => {
-      return getAWSCredentials();
-    });
-    // ipcMain.handle('aws:rekognizeImages', (event, args) => {
-    //   return getAWSCredentials();
-    // });
+    addIpcMainListeners__TwoWay(ipcMain);
   })
   .catch(console.log);
