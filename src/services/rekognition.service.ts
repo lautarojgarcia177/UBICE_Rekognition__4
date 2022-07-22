@@ -6,14 +6,25 @@ import {
   DetectTextCommand,
 } from '@aws-sdk/client-rekognition';
 import * as store from './store.service';
+import { writeMetadataOnRekognizedImages } from './exiftool.service';
 
 export function rekognizeImages(images: IRekognitionFile[]): void {
+  // Rekognize images with AWS Rekognition
   const ubiceClient = new UBICEAWSClient(store.getAWSCredentials());
-  // images.map(async (image) => {
-  //   const rekognitions = await ubiceClient.rekognize(image.path);
-  //   console.log('REKONOZIO UNAAAAA', image.name, rekognitions);
-  // });
-  // TODO: Call exiftool to write metadata
+  const promises: Promise<any>[] = [];
+  async function rekognitionPromise(image: IRekognitionFile) {
+    const rekognition = await ubiceClient.rekognize(image.path);
+    image.numbers = rekognition;
+  }
+  for (let image of images) {
+    promises.push(rekognitionPromise(image));
+  }
+  Promise.all(promises).then(() => {
+    // Ask Exiftool to write metadata
+    writeMetadataOnRekognizedImages(images).then(() => {
+      console.log(images);
+    });
+  });
 }
 
 function useRegex(input) {
@@ -32,7 +43,7 @@ class UBICEAWSClient {
       region: region,
     });
   }
-  rekognize(imagePath: string, minConfidence: number = 95) {
+  async rekognize(imagePath: string, minConfidence: number = 95): Promise<any> {
     const image = fs.readFileSync(imagePath);
     const command = new DetectTextCommand({
       Image: {
@@ -44,14 +55,9 @@ class UBICEAWSClient {
         },
       },
     });
-    return this.client.send(command)
-    // .then((res) => {
-    //   console.log(res);
-    //   res.TextDetections.filter((textDetection) =>
-    //     useRegex(textDetection.DetectedText)
-    //   )
-    //     .filter((textDetection) => (textDetection.Type === 'WORD' || textDetection.Type === 'LINE'))
-    //     .map((textDetection) => textDetection.DetectedText);
-    // });
+    let commandResult = await this.client.send(command);
+    return commandResult.TextDetections.filter((textDetection) =>
+      useRegex(textDetection.DetectedText)
+    ).map((textDetection) => textDetection.DetectedText);
   }
 }
