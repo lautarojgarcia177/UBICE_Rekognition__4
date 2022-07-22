@@ -9,16 +9,50 @@ import {
   ModalCloseButton,
   useDisclosure,
   IconButton,
-  Button,
   FormControl,
   FormLabel,
   Input,
-  FormHelperText,
+  Link,
+  Button,
 } from '@chakra-ui/react';
 import { Save } from 'react-feather';
+import { useEffect, useState } from 'react';
+import { IAWSCredentials } from '../../../../interfaces';
 
 export default function AwsCredentialsModal() {
   const { isOpen, onOpen, onClose } = useDisclosure();
+
+  const [awsCredentials, setAWSCredentials] = useState<IAWSCredentials>({
+    awsAccessKeyId: '',
+    awsSecretAccessKey: '',
+  });
+
+  useEffect(() => {
+    getAWSCredentialsFromStore();
+  }, []);
+
+  async function getAWSCredentialsFromStore() {
+    const credentials = await window.electron.getAWSCredentials();
+    setAWSCredentials(credentials);
+  }
+
+  function onSave() {
+    window.electron.setAWSCredentials(awsCredentials);
+    getAWSCredentialsFromStore();
+  }
+  function handleAccessKeyIdChange(event) {
+    setAWSCredentials((awsCredentials) => ({
+      awsAccessKeyId: event.target.value,
+      awsSecretAccessKey: awsCredentials.awsSecretAccessKey,
+    }));
+  }
+  function handleSecretAccessKeyChange(event) {
+    setAWSCredentials((awsCredentials) => ({
+      awsAccessKeyId: awsCredentials.awsAccessKeyId,
+      awsSecretAccessKey: event.target.value,
+    }));
+  }
+
   return (
     <>
       <Button onClick={onOpen}>Credenciales de aws</Button>
@@ -30,16 +64,28 @@ export default function AwsCredentialsModal() {
           <ModalCloseButton />
           <ModalBody>
             <FormControl marginBottom={2}>
-              <FormLabel>Access Key Id</FormLabel>
-              <Input type="text" />
+              <FormLabel htmlFor="awsAccessKeyId">Access Key Id</FormLabel>
+              <Input
+                type="text"
+                value={awsCredentials.awsAccessKeyId}
+                name="awsAccessKeyId"
+                id="awsAccessKeyId"
+                onChange={handleAccessKeyIdChange}
+              />
             </FormControl>
-
             <FormControl>
-              <FormLabel>Secret Access Key</FormLabel>
-              <Input type="text" />
+              <FormLabel htmlFor="awsSecretAccessKey">
+                Secret Access Key
+              </FormLabel>
+              <Input
+                type="text"
+                value={awsCredentials.awsSecretAccessKey}
+                name="awsSecretAccessKey"
+                id="awsSecretAccessKey"
+                onChange={handleSecretAccessKeyChange}
+              />
             </FormControl>
           </ModalBody>
-
           <ModalFooter>
             <IconButton
               onClick={onClose}
@@ -52,6 +98,8 @@ export default function AwsCredentialsModal() {
               aria-label="Guardar"
               icon={<Save />}
               colorScheme="green"
+              type="button"
+              onClick={onSave}
             />
           </ModalFooter>
         </ModalContent>

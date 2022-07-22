@@ -1,4 +1,4 @@
-import { SettingsIcon } from '@chakra-ui/icons'
+import { SettingsIcon } from '@chakra-ui/icons';
 import {
   Drawer,
   DrawerBody,
@@ -9,33 +9,38 @@ import {
   DrawerCloseButton,
   useDisclosure,
   IconButton,
-} from '@chakra-ui/react'
-import React from 'react'
-import AwsCredentialsModal from './aws-credentials-modal/AwsCredentialsModal'
+} from '@chakra-ui/react';
+import React from 'react';
+import AwsCredentialsModal from './aws-credentials-modal/AwsCredentialsModal';
 
 export default function SettingsDrawer() {
-  const { isOpen, onOpen, onClose } = useDisclosure()
-  const btnRef = React.useRef()
+  const { isOpen, onOpen, onClose } = useDisclosure();
+  const btnRef = React.useRef();
 
   return (
     <>
-      <IconButton ref={btnRef} onClick={onOpen} aria-label="settings" icon={<SettingsIcon />} />
+      <IconButton
+        ref={btnRef}
+        onClick={onOpen}
+        aria-label="settings"
+        icon={<SettingsIcon />}
+      />
       <Drawer
         isOpen={isOpen}
-        placement='right'
+        placement="right"
         onClose={onClose}
         finalFocusRef={btnRef}
       >
         <DrawerOverlay />
         <DrawerContent>
           <DrawerCloseButton />
-          <DrawerHeader>Configuracion</DrawerHeader>
+          <DrawerHeader>Configuración</DrawerHeader>
 
           <DrawerBody>
-          <AwsCredentialsModal />
+            <AwsCredentialsModal />
           </DrawerBody>
         </DrawerContent>
       </Drawer>
     </>
-  )
+  );
 }

@@ -8,20 +8,20 @@ export const filesSlice = createSlice({
     isRekognizing: false,
   },
   reducers: {
-    updateFiles: (state, action) => {
+    UPDATE_FILES: (state, action) => {
       state.files = action.payload;
     },
-    startRekognition: (state) => {
+    START_REKOGNITION: (state) => {
       state.isRekognizing = true;
     },
-    cancelRekognition: (state) => {
+    CANCEL_REKOGNITION: (state) => {
       state.isRekognizing = false;
     },
   },
 });
 
 /* Actions */
-export const { updateFiles, startRekognition, cancelRekognition } =
+export const { UPDATE_FILES, START_REKOGNITION, CANCEL_REKOGNITION } =
   filesSlice.actions;
 
 /* Selectors */
@@ -29,6 +29,12 @@ export const selectFiles = (state) => state.files.files;
 export const selectIsRekognizing = (state) => state.files.isRekognizing;
 
 /* Thunks */
+// https://redux.js.org/usage/writing-logic-thunks#writing-thunks
+export const startRekognitionThunk = (dispatch, getState) => {
+  const state = getState();
+  window.electron.startRekognition(state.files.files);
+  // dispatch(START_REKOGNITION());
+};
 
 /* Store */
 export const store = configureStore({

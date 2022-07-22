@@ -7,6 +7,7 @@ import { Image } from 'react-feather';
 import { useDispatch, useSelector } from 'react-redux';
 import * as store from '../../store';
 import { IRekognitionFile } from 'interfaces';
+import { startRekognitionThunk } from '../../store';
 
 const Rekognize = () => {
   const navigate = useNavigate();
@@ -14,7 +15,7 @@ const Rekognize = () => {
   const files = useSelector(store.selectFiles);
 
   function onFileInputChange(event): void {
-    dispatch(store.cancelRekognition());
+    dispatch(store.CANCEL_REKOGNITION());
     const { files } = event.target;
     let _files: IRekognitionFile[] = [];
     // Extract some props from files to make it serializable for storing in state
@@ -26,10 +27,11 @@ const Rekognize = () => {
         numbers: [],
       });
     }
-    dispatch(store.updateFiles(_files));
+    dispatch(store.UPDATE_FILES(_files));
   }
 
   function onRekognize(): void {
+    store.store.dispatch(startRekognitionThunk);
     navigate('rekognizing');
   }
 

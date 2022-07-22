@@ -7,7 +7,7 @@ const NavBar = (props) => {
   return (
     <HStack justifyContent="end">
       <SettingsDrawer />
-      <IconButton aria-label="User" icon={<User />} />
+      {/* <IconButton aria-label="User" icon={<User />} /> */}
       {/* <Avatar name='Dan Abrahmov' src='https://bit.ly/dan-abramov' /> */}
     </HStack>
   );
