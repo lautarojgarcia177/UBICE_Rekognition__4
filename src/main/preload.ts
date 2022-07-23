@@ -7,4 +7,7 @@ contextBridge.exposeInMainWorld('electron', {
   setAWSCredentials: (credentials: IAWSCredentials) => ipcRenderer.send('aws:set-credentials', credentials),
   getAWSCredentials: () => ipcRenderer.invoke('aws:get-credentials'),
   startRekognition: (files: IRekognitionFile[]) => ipcRenderer.send('aws:start-rekognition', files),
+  onRekognitionFinish: (callback) => ipcRenderer.on('aws:rekognition-finish', callback),
+  onRekognitionProgress: (callback) => ipcRenderer.on('aws:rekognition-progress', callback),
+  // unsubscribeToRekognitionProgress: ()
 });

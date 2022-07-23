@@ -17,6 +17,6 @@ export async function writeMetadataOnRekognizedImages(
       );
       promises.push(promise);
     }
-    return Promise.all(promises);
+    return Promise.all(promises).then(() => ep.close());
   });
 }

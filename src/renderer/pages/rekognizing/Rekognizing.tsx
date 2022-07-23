@@ -12,8 +12,18 @@ const Rekognizing = () => {
   const files = useSelector(store.selectFiles);
 
   useEffect(() => {
+    window.electron.onRekognitionProgress((_event, progress) => {
+      rekognitionProgressHandler(progress);
+    });
+    // return () => {
 
-  }, []);
+    // }
+  }, [])
+
+  function rekognitionProgressHandler(progress: number): void {
+    console.log('been here rekognitionProgressHandler');
+    setRekognitionProgress(progress);
+  }
 
   function onRekognizeCancel(): void {
     navigate('/');

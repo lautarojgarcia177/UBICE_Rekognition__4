@@ -5,7 +5,9 @@ declare global {
     electron: {
       setAWSCredentials(credentials: IAWSCredentials): void,
       getAWSCredentials(): IAWSCredentials,
-      startRekognition(files: IRekognitionFile[]): IRekognitionFile[]
+      startRekognition(files: IRekognitionFile[]): IRekognitionFile[],
+      onRekognitionFinish(callback): void,
+      onRekognitionProgress(callback): void,
     };
   }
 }

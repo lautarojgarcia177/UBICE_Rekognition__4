@@ -7,13 +7,15 @@ import {
 } from '@aws-sdk/client-rekognition';
 import * as store from './store.service';
 import { writeMetadataOnRekognizedImages } from './exiftool.service';
+import { uniq } from 'lodash';
 
-export function rekognizeImages(images: IRekognitionFile[]): void {
+export function rekognizeImages(images: IRekognitionFile[], awsProgressCallback, exifToolProgressCallback): void {
   // Rekognize images with AWS Rekognition
   const ubiceClient = new UBICEAWSClient(store.getAWSCredentials());
   const promises: Promise<any>[] = [];
   async function rekognitionPromise(image: IRekognitionFile) {
     const rekognition = await ubiceClient.rekognize(image.path);
+    awsProgressCallback()
     image.numbers = rekognition;
   }
   for (let image of images) {
@@ -22,6 +24,7 @@ export function rekognizeImages(images: IRekognitionFile[]): void {
   Promise.all(promises).then(() => {
     // Ask Exiftool to write metadata
     writeMetadataOnRekognizedImages(images).then(() => {
+      // TODO Call onRekognitionFinish
       console.log(images);
     });
   });
@@ -47,7 +50,7 @@ class UBICEAWSClient {
     const image = fs.readFileSync(imagePath);
     const command = new DetectTextCommand({
       Image: {
-        Bytes: image,
+          Bytes: image,
       },
       Filters: {
         WordFilter: {
@@ -56,8 +59,9 @@ class UBICEAWSClient {
       },
     });
     let commandResult = await this.client.send(command);
-    return commandResult.TextDetections.filter((textDetection) =>
+    const numbersArray = commandResult.TextDetections.filter((textDetection) =>
       useRegex(textDetection.DetectedText)
     ).map((textDetection) => textDetection.DetectedText);
+    return uniq(numbersArray);
   }
 }

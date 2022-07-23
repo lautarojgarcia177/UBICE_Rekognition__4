@@ -16,6 +16,9 @@ import MenuBuilder from './menu';
 import { resolveHtmlPath } from './util';
 import { addIpcMainListeners__RendererToMain, addIpcMainListeners__TwoWay } from './ipc.main';
 
+import EventEmitter from 'events';
+EventEmitter.setMaxListeners(0);
+
 class AppUpdater {
   constructor() {
     log.transports.file.level = 'info';
@@ -76,7 +79,7 @@ const createWindow = async () => {
     },
   });
 
-  addIpcMainListeners__RendererToMain(ipcMain);
+  addIpcMainListeners__RendererToMain(ipcMain, mainWindow);
 
   mainWindow.loadURL(resolveHtmlPath('index.html'));
 
