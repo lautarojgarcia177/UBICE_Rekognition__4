@@ -4,6 +4,8 @@ import { IAWSCredentials } from '../interfaces';
 
 const store = new Store();
 
+// TODO Use models/schemas
+
 export function setAWSCredentials(awsCredentials: IAWSCredentials): void {
   store.set('awsAccessKeyId', awsCredentials.awsAccessKeyId);
   store.set('awsSecretAccessKey', awsCredentials.awsSecretAccessKey);

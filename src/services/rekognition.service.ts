@@ -1,6 +1,5 @@
 import { IRekognitionFile, IAWSCredentials } from '../interfaces';
 import fs from 'fs';
-import path from 'path';
 import {
   RekognitionClient,
   DetectTextCommand,
@@ -9,24 +8,31 @@ import * as store from './store.service';
 import { writeMetadataOnRekognizedImages } from './exiftool.service';
 import { uniq } from 'lodash';
 
-export function rekognizeImages(images: IRekognitionFile[], awsProgressCallback, exifToolProgressCallback): void {
+export function rekognizeImages(
+  images: IRekognitionFile[],
+  awsRekognitionProgressCallback,
+  awsRekognitionFinishCallback,
+  exifToolTaggingProgressCallback,
+  exifToolTaggingFinishCallback
+): void {
   // Rekognize images with AWS Rekognition
   const ubiceClient = new UBICEAWSClient(store.getAWSCredentials());
   const promises: Promise<any>[] = [];
   async function rekognitionPromise(image: IRekognitionFile) {
     const rekognition = await ubiceClient.rekognize(image.path);
-    awsProgressCallback()
+    awsRekognitionProgressCallback();
     image.numbers = rekognition;
   }
   for (let image of images) {
     promises.push(rekognitionPromise(image));
   }
   Promise.all(promises).then(() => {
+    awsRekognitionFinishCallback();
     // Ask Exiftool to write metadata
-    writeMetadataOnRekognizedImages(images).then(() => {
-      // TODO Call onRekognitionFinish
-      console.log(images);
-    });
+    writeMetadataOnRekognizedImages(
+      images,
+      exifToolTaggingProgressCallback
+    ).then(() => exifToolTaggingFinishCallback());
   });
 }
 
@@ -50,7 +56,7 @@ class UBICEAWSClient {
     const image = fs.readFileSync(imagePath);
     const command = new DetectTextCommand({
       Image: {
-          Bytes: image,
+        Bytes: image,
       },
       Filters: {
         WordFilter: {

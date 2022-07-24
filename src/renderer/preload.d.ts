@@ -8,6 +8,8 @@ declare global {
       startRekognition(files: IRekognitionFile[]): IRekognitionFile[],
       onRekognitionFinish(callback): void,
       onRekognitionProgress(callback): void,
+      onExifToolTagProgress(callback): void,
+      onExifToolTagFinish(callback): void,
     };
   }
 }
