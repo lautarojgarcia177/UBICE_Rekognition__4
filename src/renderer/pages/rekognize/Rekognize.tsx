@@ -8,6 +8,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as store from '../../store';
 import { IRekognitionFile } from 'interfaces';
 import { startRekognitionThunk } from '../../store';
+import './rekognize.css';
 
 const Rekognize = () => {
   const navigate = useNavigate();
@@ -51,9 +52,9 @@ const Rekognize = () => {
 
   return (
     <VStack>
-      <Container centerContent m={5} w="80%" h="100px">
+      <Container centerContent m={5} w="80%">
         <h2 style={{fontSize: '20px'}}>Rekonocer y etiquetar imagenes</h2>
-        <p>Haga click en la caja o arrastre las fotos a la misma</p>
+        <p>Haga click en la caja o arrastre las fotos al centro de la misma.</p>
         <DropFileInput onFileInputChange={onFileInputChange} onDrop={onDrop} />
       </Container>
       {files.length && true && (
