@@ -5,6 +5,7 @@ import { Upload } from 'react-feather';
 
 type DropFileInputProps = {
   onFileInputChange: (event: any) => void;
+  onDrop: (files, event) => void;
 }
 
 const DropFileInput = (props: DropFileInputProps) => {
@@ -24,7 +25,7 @@ const DropFileInput = (props: DropFileInputProps) => {
     // console.log('on mouse over!');
   }
   const onFrameDrop = (event: any) => {
-    // console.log('on mouse over!');
+    // console.log('on frame drop!', event);
   }
   const onDragOver = (event: any) => {
     // console.log('on mouse over!');
@@ -32,9 +33,9 @@ const DropFileInput = (props: DropFileInputProps) => {
   const onDragLeave = (event: any) => {
     // console.log('on mouse over!');
   }
-  const onDrop = (files, event: any) => {
+ /*  const onDrop = (files, event: any) => {
     // console.log('on mouse over!');
-  }
+  } */
 
   return (
     <Container onMouseOver={onMouseOver}
@@ -59,7 +60,7 @@ const DropFileInput = (props: DropFileInputProps) => {
         onFrameDrop={onFrameDrop}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
-        onDrop={onDrop}
+        onDrop={props.onDrop}
         onTargetClick={onTargetClick}
       >
         <Upload size={48}/>
