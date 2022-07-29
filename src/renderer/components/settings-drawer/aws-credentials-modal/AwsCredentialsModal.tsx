@@ -14,18 +14,21 @@ import {
   Input,
   Link,
   Button,
+  useToast,
 } from '@chakra-ui/react';
 import { Save } from 'react-feather';
 import { useEffect, useState } from 'react';
 import { IAWSCredentials } from '../../../../interfaces';
+import { useSelector } from 'react-redux';
+import * as store from '../../../store';
 
-export default function AwsCredentialsModal() {
+export default function AwsCredentialsModal({closeDrawer}) {
   const { isOpen, onOpen, onClose } = useDisclosure();
+  const toast = useToast()
 
-  const [awsCredentials, setAWSCredentials] = useState<IAWSCredentials>({
-    awsAccessKeyId: '',
-    awsSecretAccessKey: '',
-  });
+  const [awsCredentials, setAWSCredentials] = useState<IAWSCredentials>(
+    useSelector(store.selectAWSCredentials)
+  );
 
   useEffect(() => {
     getAWSCredentialsFromStore();
@@ -37,15 +40,25 @@ export default function AwsCredentialsModal() {
   }
 
   function onSave() {
-    window.electron.setAWSCredentials(awsCredentials);
-    getAWSCredentialsFromStore();
+    store.store.dispatch(store.saveAwsCredentials(awsCredentials));
+    toast({
+      title: 'Credenciales AWS Actualizadas',
+      description: "Se han actualizado las credenciales AWS",
+      status: 'success',
+      duration: 3000,
+      isClosable: true,
+    });
+    onClose();
+    closeDrawer();
   }
+
   function handleAccessKeyIdChange(event) {
     setAWSCredentials((awsCredentials) => ({
       awsAccessKeyId: event.target.value,
       awsSecretAccessKey: awsCredentials.awsSecretAccessKey,
     }));
   }
+
   function handleSecretAccessKeyChange(event) {
     setAWSCredentials((awsCredentials) => ({
       awsAccessKeyId: awsCredentials.awsAccessKeyId,

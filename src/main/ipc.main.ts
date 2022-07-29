@@ -11,7 +11,7 @@ import {
   AWS__START_REKOGNITION,
   EXIFTOOL__TAGGING_PROGRESS,
   EXIFTOOL__TAGGING_FINISH,
-} from '../constants';
+} from '../ipc.messages.constants';
 
 // IPC Renderer to main (one-way)
 export function addIpcMainListeners__RendererToMain(
@@ -58,8 +58,7 @@ export function addIpcMainListeners__TwoWay(ipcMain: IpcMain): void {
   });
 }
 
-/* Main to Renderer (one-way) */
-
+// Main to Renderer (one-way)
 /* Notifies aws rekognition progress by percentage */
 export function notifyAwsRekognitionProgress(
   browserWindow: BrowserWindow,

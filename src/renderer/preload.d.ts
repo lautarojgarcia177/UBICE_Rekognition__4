@@ -10,6 +10,9 @@ declare global {
       onRekognitionProgress(callback): void,
       onExifToolTagProgress(callback): void,
       onExifToolTagFinish(callback): void,
+      unsubscribeAllOnRekognitionProgress(): void,
+      unsubscribeAllOnExiftoolTagProgress(): void,
+      unsubscribeAllOnExifToolTagFinish(): void,
     };
   }
 }

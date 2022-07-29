@@ -4,8 +4,8 @@ import { useEffect, useState } from 'react';
 import { VStack } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
 import * as store from '../../store';
-import { useSelector } from 'react-redux';
-import FinishRekogntionAndTagAlert from 'renderer/components/finish-rekognition-and-tag-alert/FinishRekognitionAndTagAlert';
+import { useDispatch, useSelector } from 'react-redux';
+import { useToast } from '@chakra-ui/react';
 
 type ProcessProgressProps = {
   title: string;
@@ -15,11 +15,7 @@ function ProcessProgress(props: ProcessProgressProps) {
   return (
     <>
       <h3>{props.title}</h3>
-      <Spinner
-        thickness="4px"
-        speed="0.65s"
-        size="xl"
-      />
+      <Spinner thickness="4px" speed="0.65s" size="xl" />
       <Progress
         width="80%"
         hasStripe
@@ -36,33 +32,50 @@ const Rekognizing = () => {
   const navigate = useNavigate();
   const [rekognitionProgress, setRekognitionProgress] = useState(0);
   const [exifToolTaggingProgress, setexifToolTaggingProgress] = useState(0);
-  const { isOpen, onOpen, onClose } = useDisclosure();
+  const [progressCount, setProgressCount] = useState(0);
+  const toast = useToast();
+  const dispatch = useDispatch();
+  const selectedFilesLength = useSelector(store.selectFiles).length;
 
   useEffect(() => {
     window.electron.onRekognitionProgress((_event, progress) => {
-      console.log('rekognition progress', progress);
       rekognitionProgressHandler(progress);
     });
     window.electron.onExifToolTagProgress((_event, progress) => {
-      console.log('exiftool progress', progress);
       exifToolTaggingProgressHandler(progress);
     });
     window.electron.onExifToolTagFinish(() => {
       handleExifToolTagFinish();
     });
-    // return () => {
-    // TODO Remove rekognition progress listener and exiftool tag progress listener
-    // }
+    return () => {
+      window.electron.unsubscribeAllOnRekognitionProgress();
+      window.electron.unsubscribeAllOnExiftoolTagProgress();
+      window.electron.unsubscribeAllOnExifToolTagFinish();
+    };
   }, []);
 
   function rekognitionProgressHandler(progress: number): void {
     setRekognitionProgress(progress);
+    updateProgressCount(progress);
   }
   function exifToolTaggingProgressHandler(progress: number): void {
     setexifToolTaggingProgress(progress);
+    updateProgressCount(progress);
+  }
+  function updateProgressCount(progress: number) {
+    setProgressCount((progress * selectedFilesLength) / 100);
   }
   function handleExifToolTagFinish() {
-    onOpen();
+    toast({
+      title: 'Rekonocimiento y etiquetado finalizado',
+      description:
+        'Se han reconocido los numeros y se han etiquetado las imagenes',
+      duration: null,
+      status: 'success',
+      isClosable: true,
+    });
+    dispatch(store.UPDATE_FILES([]));
+    navigate('/');
   }
   function handleCancel(): void {
     navigate('/');
@@ -83,17 +96,15 @@ const Rekognizing = () => {
               : exifToolTaggingProgress
           }
         />
+        <p>
+          {progressCount} de {selectedFilesLength} Fotos
+        </p>
         <Button colorScheme="red" onClick={handleCancel}>
           Cancel
         </Button>
         ;
       </VStack>
       {/* https://chakra-ui.com/docs/components/alert-dialog */}
-      <FinishRekogntionAndTagAlert
-        onOpen={onOpen}
-        onClose={onClose}
-        isOpen={isOpen}
-      />
     </>
   );
 };

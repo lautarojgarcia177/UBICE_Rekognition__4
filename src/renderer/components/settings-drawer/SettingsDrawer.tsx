@@ -37,7 +37,7 @@ export default function SettingsDrawer() {
           <DrawerHeader>Configuración</DrawerHeader>
 
           <DrawerBody>
-            <AwsCredentialsModal />
+            <AwsCredentialsModal closeDrawer={onClose} />
           </DrawerBody>
         </DrawerContent>
       </Drawer>
