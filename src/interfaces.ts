@@ -7,5 +7,5 @@ export interface IRekognitionFile {
   id: number,
   name: string,
   path: string,
-  numbers: number[],
+  numbers: number[] | string[],
 }
