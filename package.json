@@ -1,5 +1,5 @@
 {
-    "description": "A foundation for scalable desktop apps",
+    "description": "Rekognize runner numbers in pictures",
     "keywords": [
         "electron",
         "boilerplate",
@@ -11,25 +11,17 @@
         "hot",
         "reload"
     ],
-    "homepage": "https://github.com/electron-react-boilerplate/electron-react-boilerplate#readme",
-    "bugs": {
-        "url": "https://github.com/electron-react-boilerplate/electron-react-boilerplate/issues"
-    },
+    "homepage": "https://github.com/lautarojgarcia177/UBICE_Rekognition__4/blob/main/README.md",
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/electron-react-boilerplate/electron-react-boilerplate.git"
+        "url": "git+https://github.com/lautarojgarcia177/UBICE_Rekognition__4.git"
     },
     "license": "MIT",
     "author": {
-        "name": "Electron React Boilerplate Maintainers",
-        "email": "electronreactboilerplate@gmail.com",
-        "url": "https://electron-react-boilerplate.js.org"
+        "name": "Lautaro Garcia",
+        "email": "lautarojgarcia177@gmail.com",
+        "url": "https://www.linkedin.com/in/lautaro-garcia-b19b75164/"
     },
-    "contributors": [{
-        "name": "Amila Welihinda",
-        "email": "amilajack@gmail.com",
-        "url": "https://github.com/amilajack"
-    }],
     "main": "./src/main/main.ts",
     "scripts": {
         "build": "concurrently \"npm run build:main\" \"npm run build:renderer\"",
@@ -199,8 +191,8 @@
         "webpack-merge": "^5.8.0"
     },
     "build": {
-        "productName": "ElectronReact",
-        "appId": "org.erb.ElectronReact",
+        "productName": "UBICE_Rekognition",
+        "appId": "org.erb.UBICERekognition",
         "asar": true,
         "asarUnpack": "**\\*.{node,dll}",
         "files": [

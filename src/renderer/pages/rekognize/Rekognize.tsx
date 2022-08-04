@@ -27,6 +27,10 @@ const Rekognize = () => {
   function prepareFiles(files) {
     let _files: IRekognitionFile[] = [];
     // Extract some props from files to make it serializable for storing in state
+    // Filter by supported file type
+    files = files.filter(
+      (file) => file.type === 'image/jpeg' || file.type === 'image/png'
+    );
     for (let i = 0; i < files.length; i++) {
       _files.push({
         id: i,
@@ -53,7 +57,7 @@ const Rekognize = () => {
   return (
     <VStack>
       <Container centerContent m={5} w="80%">
-        <h2 style={{fontSize: '20px'}}>Rekonocer y etiquetar imagenes</h2>
+        <h2 style={{ fontSize: '20px' }}>Rekonocer y etiquetar imagenes</h2>
         <p>Haga click en la caja o arrastre las fotos al centro de la misma.</p>
         <DropFileInput onFileInputChange={onFileInputChange} onDrop={onDrop} />
       </Container>
