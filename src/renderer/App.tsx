@@ -1,22 +1,31 @@
 import { Outlet } from 'react-router-dom';
-import { ChakraProvider, Container } from '@chakra-ui/react';
+import { ChakraProvider, Container, useToast } from '@chakra-ui/react';
 import NavBar from './components/nav-bar/NavBar';
 import { useEffect } from 'react';
 import * as store from './store';
-import { useToast } from '@chakra-ui/react'
 import { useSelector } from 'react-redux';
 import { IAWSCredentials } from '../interfaces';
 
 export default function App() {
-  const awsCredentials: IAWSCredentials = useSelector(store.selectAWSCredentials);
+  const toast = useToast();
+  const awsCredentials: IAWSCredentials = useSelector(
+    store.selectAWSCredentials
+  );
   useEffect(() => {
     store.store.dispatch(store.loadAwsCredentials());
   }, []);
   useEffect(() => {
-    if (awsCredentials.awsAccessKeyId === 'undefined' || awsCredentials.awsAccessKeyId === 'undefined') {
+    if (
+      !awsCredentials ||
+      !awsCredentials.awsAccessKeyId ||
+      !awsCredentials.awsSecretAccessKey ||
+      awsCredentials.awsAccessKeyId === 'undefined' ||
+      awsCredentials.awsAccessKeyId === 'undefined'
+    ) {
       toast({
         title: 'Credenciales AWS vacias',
-        description: "Porfavor configure las credenciales de AWS para rekonocer imagenes",
+        description:
+          'Porfavor configure las credenciales de AWS para rekonocer imagenes',
         status: 'warning',
         duration: 9000,
         isClosable: true,
@@ -32,7 +41,3 @@ export default function App() {
     </ChakraProvider>
   );
 }
-function toast(arg0: { title: string; description: string; status: string; duration: number; isClosable: boolean; }) {
-  throw new Error('Function not implemented.');
-}
-
