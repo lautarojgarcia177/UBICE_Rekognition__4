@@ -1,6 +1,6 @@
 import { contextBridge, ipcRenderer } from 'electron';
 import { IAWSCredentials, IRekognitionFile } from '../interfaces';
-import { AWS__GET_CREDENTIALS, AWS__REKOGNITION_FINISH, AWS__REKOGNITION_PROGRESS, AWS__SET_CREDENTIALS, AWS__START_REKOGNITION, EXIFTOOL__TAGGING_FINISH, EXIFTOOL__TAGGING_PROGRESS } from '../ipc.messages.constants';
+import { APP__ERROR, AWS__GET_CREDENTIALS, AWS__REKOGNITION_FINISH, AWS__REKOGNITION_PROGRESS, AWS__SET_CREDENTIALS, AWS__START_REKOGNITION, EXIFTOOL__TAGGING_FINISH, EXIFTOOL__TAGGING_PROGRESS } from '../ipc.messages.constants';
 
 /* API Accesible via window.electron */
 contextBridge.exposeInMainWorld('electron', {
@@ -14,4 +14,5 @@ contextBridge.exposeInMainWorld('electron', {
   unsubscribeAllOnExiftoolTagProgress: () => ipcRenderer.removeAllListeners(EXIFTOOL__TAGGING_PROGRESS),
   onExifToolTagFinish: (callback) => ipcRenderer.on(EXIFTOOL__TAGGING_FINISH, callback),
   unsubscribeAllOnExifToolTagFinish: () => ipcRenderer.removeAllListeners(EXIFTOOL__TAGGING_FINISH),
+  onError: (callback) => ipcRenderer.on(APP__ERROR, callback)
 });

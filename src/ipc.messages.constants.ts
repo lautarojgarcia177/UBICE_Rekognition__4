@@ -5,3 +5,7 @@ export const AWS__REKOGNITION_FINISH = 'aws:rekognition-finish';
 export const AWS__REKOGNITION_PROGRESS = 'aws:rekognition-progress';
 export const EXIFTOOL__TAGGING_PROGRESS = 'exiftool:tagging-progress';
 export const EXIFTOOL__TAGGING_FINISH = 'exiftool:tagging-finish';
+
+// Error codes
+export const APP__ERROR = 'app:error';
+export const EXIFTOOL_ERROR = 'exiftool: error';

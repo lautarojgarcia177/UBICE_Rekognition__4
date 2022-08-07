@@ -13,6 +13,7 @@ declare global {
       unsubscribeAllOnRekognitionProgress(): void,
       unsubscribeAllOnExiftoolTagProgress(): void,
       unsubscribeAllOnExifToolTagFinish(): void,
+      onError(callback): void,
     };
   }
 }

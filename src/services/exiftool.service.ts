@@ -26,7 +26,8 @@ export async function writeMetadataOnRekognizedImages(
           },
           ['overwrite_original']
         )
-        .then(() => exifToolProgressCallback());
+        .then(() => exifToolProgressCallback())
+        .catch(err => exifToolProgressCallback(err));
       promises.push(promise);
     }
     return Promise.all(promises).then(() => ep.close());

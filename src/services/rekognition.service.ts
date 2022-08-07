@@ -22,9 +22,8 @@ export function rekognizeImages(
   Promise.all(promises).then(() => {
     awsRekognitionFinishCallback();
     // Ask Exiftool to write metadata
-    writeMetadataOnRekognizedImages(
-      images,
-      exifToolTaggingProgressCallback
-    ).then(() => exifToolTaggingFinishCallback());
+    writeMetadataOnRekognizedImages(images, exifToolTaggingProgressCallback)
+      .then(() => exifToolTaggingFinishCallback())
+      .catch((err) => exifToolTaggingFinishCallback(err));
   });
 }

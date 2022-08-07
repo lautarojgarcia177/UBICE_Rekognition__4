@@ -11,6 +11,8 @@ import {
   AWS__START_REKOGNITION,
   EXIFTOOL__TAGGING_PROGRESS,
   EXIFTOOL__TAGGING_FINISH,
+  EXIFTOOL_ERROR,
+  APP__ERROR,
 } from '../ipc.messages.constants';
 
 // IPC Renderer to main (one-way)
@@ -30,7 +32,12 @@ export function addIpcMainListeners__RendererToMain(
       const progress = (rekognizedImagesCounter * 100) / imagesAmount;
       notifyAwsRekognitionProgress(browserWindow, progress);
     }
-    function exifToolTaggingProgressCallback(): void {
+    function exifToolTaggingProgressCallback(err?: any): void {
+      if (err) {
+        console.warn('Error etiquetando imagenes con Exiftool', err);
+        notifyError(browserWindow, EXIFTOOL_ERROR, err);
+        return;
+      }
       let taggedImagesCounter = 0;
       const progress = (taggedImagesCounter * 100) / imagesAmount;
       notifyExiftoolTaggingProgress(browserWindow, progress);
@@ -38,7 +45,12 @@ export function addIpcMainListeners__RendererToMain(
     function awsRekognitionFinishCallback(): void {
       notifyAwsRekognitionFinish(browserWindow);
     }
-    function exiftoolTaggingFinishCallback(): void {
+    function exiftoolTaggingFinishCallback(err?: any): void {
+      if (err) {
+        console.warn('Error etiquetando imagenes con Exiftool', err);
+        notifyError(browserWindow, EXIFTOOL_ERROR, err);
+        return;
+      }
       notifyExiftoolTaggingFinish(browserWindow);
     }
     rekognitionSvc.rekognizeImages(
@@ -80,4 +92,9 @@ export function notifyExiftoolTaggingProgress(
 /* Notifies exiftool tagging finish */
 export function notifyExiftoolTaggingFinish(browserWindow: BrowserWindow) {
   browserWindow.webContents.send(EXIFTOOL__TAGGING_FINISH);
+}
+
+/* Notifies error */
+export function notifyError(browserWindow: BrowserWindow, errCode: string, err) {
+  browserWindow.webContents.send(errCode, err);
 }
