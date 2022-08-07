@@ -15,6 +15,7 @@ export async function writeMetadataOnRekognizedImages(
       } else {
         for (let number of image.numbers) {
           number = padStart(String(number), 5, '0');
+          console.log(number);
         }
       }
       const promise = ep

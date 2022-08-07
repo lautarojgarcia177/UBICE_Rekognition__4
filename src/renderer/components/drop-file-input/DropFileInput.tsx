@@ -1,6 +1,5 @@
 import { useRef } from 'react';
 import { FileDrop } from 'react-file-drop';
-import { Container } from '@chakra-ui/react';
 import { Upload } from 'react-feather';
 import './drop-file-input.css';
 
@@ -18,22 +17,22 @@ const DropFileInput = (props: DropFileInputProps) => {
     fileInputRef.current.click();
   };
   const onMouseOver = (event: any) => {
-    console.log('on mouse over!');
+    // console.log('on mouse over!');
   };
   const onFrameDragEnter = (event: any) => {
-    console.log('onFrameDragEnter!');
+    // console.log('onFrameDragEnter!');
   };
   const onFrameDragLeave = (event: any) => {
-    console.log('onFrameDragLeave!');
+    // console.log('onFrameDragLeave!');
   };
   const onFrameDrop = (event: any) => {
-    console.log('onFrameDrop!', event);
+    // console.log('onFrameDrop!', event);
   };
   const onDragOver = (event: any) => {
-    console.log('onDragOver!');
+    // console.log('onDragOver!');
   };
   const onDragLeave = (event: any) => {
-    console.log('onDragLeave!');
+    // console.log('onDragLeave!');
   };
 
   return (

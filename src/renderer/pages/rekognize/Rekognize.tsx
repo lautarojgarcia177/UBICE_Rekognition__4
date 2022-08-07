@@ -21,17 +21,18 @@ const Rekognize = () => {
   }
 
   function onDrop(files, event): void {
-    const filesArray = Object.keys(files).map(function (key) {
-      return files[key];
-    });
-    prepareFiles(filesArray);
+    prepareFiles(files);
   }
 
   function prepareFiles(files) {
+    // Convert object to array
+    const filesArray = Object.keys(files).map(function (key) {
+      return files[key];
+    });
     let _files: IRekognitionFile[] = [];
     // Extract some props from files to make it serializable for storing in state
     // Filter by supported file type
-    files = files.filter(
+    files = filesArray.filter(
       (file) => file.type === 'image/jpeg' || file.type === 'image/png'
     );
     for (let i = 0; i < files.length; i++) {
@@ -51,9 +52,9 @@ const Rekognize = () => {
   }
 
   const listFiles = files.map((file) => (
-    <ListItem key={file.id}>
+    <ListItem key={file.id} className='li__file-name'>
       <ListIcon as={Image} />
-      {file.name}
+      <span>{file.name}</span>
     </ListItem>
   ));
 
