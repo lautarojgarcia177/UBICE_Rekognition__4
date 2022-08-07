@@ -1,58 +1,49 @@
 import { useRef } from 'react';
 import { FileDrop } from 'react-file-drop';
-import { Container } from '@chakra-ui/react'
+import { Container } from '@chakra-ui/react';
 import { Upload } from 'react-feather';
+import './drop-file-input.css';
 
 type DropFileInputProps = {
   onFileInputChange: (event: any) => void;
   onDrop: (files, event) => void;
-}
+};
 
 const DropFileInput = (props: DropFileInputProps) => {
   const fileInputRef = useRef(null);
+  const { onFileInputChange, onDrop } = props;
 
   // Event handlers
   const onTargetClick = () => {
     fileInputRef.current.click();
   };
   const onMouseOver = (event: any) => {
-    // console.log('on mouse over!');
-  }
+    console.log('on mouse over!');
+  };
   const onFrameDragEnter = (event: any) => {
-    // console.log('on mouse over!');
-  }
+    console.log('onFrameDragEnter!');
+  };
   const onFrameDragLeave = (event: any) => {
-    // console.log('on mouse over!');
-  }
+    console.log('onFrameDragLeave!');
+  };
   const onFrameDrop = (event: any) => {
-    // console.log('on frame drop!', event);
-  }
+    console.log('onFrameDrop!', event);
+  };
   const onDragOver = (event: any) => {
-    // console.log('on mouse over!');
-  }
+    console.log('onDragOver!');
+  };
   const onDragLeave = (event: any) => {
-    // console.log('on mouse over!');
-  }
- /*  const onDrop = (files, event: any) => {
-    // console.log('on mouse over!');
-  } */
+    console.log('onDragLeave!');
+  };
 
   return (
-    <Container onMouseOver={onMouseOver}
-      centerContent
-      border='4px'
-      borderRadius='15px'
-      borderColor='gray'
-      borderStyle='dashed solid'
-      pt={6}
-      pb={6}
-    >
+    <>
       <input
         multiple
-        onChange={props.onFileInputChange}
+        onChange={onFileInputChange}
         ref={fileInputRef}
         type="file"
-        style={{display: 'none'}}
+        style={{ display: 'none' }}
       />
       <FileDrop
         onFrameDragEnter={onFrameDragEnter}
@@ -60,12 +51,12 @@ const DropFileInput = (props: DropFileInputProps) => {
         onFrameDrop={onFrameDrop}
         onDragOver={onDragOver}
         onDragLeave={onDragLeave}
-        onDrop={props.onDrop}
+        onDrop={onDrop}
         onTargetClick={onTargetClick}
       >
-        <Upload size={48}/>
+        <Upload size={48} />
       </FileDrop>
-    </Container>
+    </>
   );
 };
 

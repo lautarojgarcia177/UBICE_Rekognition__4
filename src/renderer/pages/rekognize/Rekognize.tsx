@@ -21,7 +21,10 @@ const Rekognize = () => {
   }
 
   function onDrop(files, event): void {
-    prepareFiles(files);
+    const filesArray = Object.keys(files).map(function (key) {
+      return files[key];
+    });
+    prepareFiles(filesArray);
   }
 
   function prepareFiles(files) {
@@ -57,9 +60,13 @@ const Rekognize = () => {
   return (
     <VStack>
       <Container centerContent m={5} w="80%">
-        <h2 style={{ fontSize: '20px' }}>Rekonocer y etiquetar imagenes</h2>
-        <p>Haga click en la caja o arrastre las fotos al centro de la misma.</p>
+        <h2 style={{ fontSize: '20px', marginBottom: '1rem' }}>
+          Rekonocer y etiquetar imagenes
+        </h2>
         <DropFileInput onFileInputChange={onFileInputChange} onDrop={onDrop} />
+        <small style={{ marginTop: '0.5rem' }}>
+          Haga click en la caja o arrastre las fotos al centro de la misma.
+        </small>
       </Container>
       {files.length && true && (
         <>
