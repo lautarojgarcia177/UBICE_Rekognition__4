@@ -12,9 +12,6 @@ export default function App() {
     store.selectAWSCredentials
   );
   useEffect(() => {
-    store.store.dispatch(store.loadAwsCredentials());
-  }, []);
-  useEffect(() => {
     if (
       !awsCredentials ||
       !awsCredentials.awsAccessKeyId ||
@@ -32,6 +29,18 @@ export default function App() {
       });
     }
   }, [awsCredentials]);
+  useEffect(() => {
+    store.store.dispatch(store.loadAwsCredentials());
+    window.electron.onError((_event, value) => {
+      toast({
+        title: 'Hubo un error',
+        description: value,
+        status: 'error',
+        duration: 9000,
+        isClosable: true,
+      })
+    });
+  }, []);
   return (
     <ChakraProvider>
       <Container>

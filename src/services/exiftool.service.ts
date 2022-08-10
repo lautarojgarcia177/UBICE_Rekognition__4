@@ -9,14 +9,18 @@ export async function writeMetadataOnRekognizedImages(
 ) {
   ep.open().then(() => {
     const promises: Promise<any>[] = [];
+    // Tag requirement:
+    // - Images with no numbers should have #
+    // - Images with numbers should have 5 chars length and fill the start with 0's
     for (let image of images) {
       if (!image.numbers.length) {
         image.numbers.push('#');
       } else {
+        const numbersForTag: Array<string> = [];
         for (let number of image.numbers) {
-          number = padStart(String(number), 5, '0');
-          console.log(number);
+          numbersForTag.push(padStart(String(number), 5, '0'));
         }
+        image.numbers = numbersForTag;
       }
       const promise = ep
         .writeMetadata(
