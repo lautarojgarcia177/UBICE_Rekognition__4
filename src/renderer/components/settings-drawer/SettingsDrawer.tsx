@@ -9,9 +9,13 @@ import {
   DrawerCloseButton,
   useDisclosure,
   IconButton,
+  VStack,
+  Center,
+  Flex,
 } from '@chakra-ui/react';
 import React from 'react';
 import AwsCredentialsModal from './aws-credentials-modal/AwsCredentialsModal';
+import AwsRekognitionSettingsModal from './aws-rekognition-settings-modal/AwsRekognitionSettingsModal';
 
 export default function SettingsDrawer() {
   const { isOpen, onOpen, onClose } = useDisclosure();
@@ -37,7 +41,11 @@ export default function SettingsDrawer() {
           <DrawerHeader>Configuración</DrawerHeader>
 
           <DrawerBody>
-            <AwsCredentialsModal closeDrawer={onClose} />
+            <Flex direction='column' alignItems='start'>
+              <AwsCredentialsModal closeDrawer={onClose} />
+              <br></br>
+              <AwsRekognitionSettingsModal closeDrawer={onClose} />
+            </Flex>
           </DrawerBody>
         </DrawerContent>
       </Drawer>

@@ -1,5 +1,5 @@
 import { configureStore, createSlice } from '@reduxjs/toolkit';
-import { IAWSCredentials } from '../interfaces';
+import { IAWSCredentials, IAWSRekognitionSettings } from '../interfaces';
 
 /* Slices */
 export const filesSlice = createSlice({
@@ -10,6 +10,9 @@ export const filesSlice = createSlice({
     awsCredentials: {
       awsAccessKeyId: null,
       awsSecretAccessKey: null
+    },
+    awsRekognitionSettings: {
+      minConfidence: 95,
     }
   },
   reducers: {
@@ -25,17 +28,21 @@ export const filesSlice = createSlice({
     SET_AWS_CREDENTIALS: (state, action) => {
       state.awsCredentials = action.payload;
     },
+    SET_AWS_REKOGNITION_SETTINGS: (state, action) => {
+      state.awsRekognitionSettings = action.payload;
+    },
   },
 });
 
 /* Actions */
-export const { UPDATE_FILES, START_REKOGNITION, CANCEL_REKOGNITION, SET_AWS_CREDENTIALS } =
+export const { UPDATE_FILES, START_REKOGNITION, CANCEL_REKOGNITION, SET_AWS_CREDENTIALS, SET_AWS_REKOGNITION_SETTINGS } =
   filesSlice.actions;
 
 /* Selectors */
 export const selectFiles = (state) => state.files.files;
 export const selectIsRekognizing = (state) => state.files.isRekognizing;
 export const selectAWSCredentials = (state) => state.files.awsCredentials;
+export const selectAWSRekognitionSettings = (state) => state.files.awsRekognitionSettings;
 
 /* Middleware */
 // https://redux.js.org/usage/writing-logic-thunks#writing-thunks
@@ -56,6 +63,18 @@ export async function loadAWSCredentialsThunk(dispatch, getState) {
   if (storedAWSCredentials.awsAccessKeyId === 'undefined') storedAWSCredentials.awsAccessKeyId = '';
   if (storedAWSCredentials.awsSecretAccessKey === 'undefined') storedAWSCredentials.awsSecretAccessKey = '';
   dispatch(SET_AWS_CREDENTIALS(storedAWSCredentials));
+}
+export function loadAwsRekognitionSettings() {
+  return loadAWSRekognitionSettingsThunk;
+}
+export function saveAwsRekognitionSettings(awsRekognitionSettings: IAWSRekognitionSettings) {
+  window.electron.setAWSRekognitionSettings(awsRekognitionSettings);
+  return loadAWSRekognitionSettingsThunk;
+}
+export async function loadAWSRekognitionSettingsThunk(dispatch, getState) {
+  const storedAWSRekognitionSettings = await window.electron.getAWSRekognitionSettings();
+  if (!storedAWSRekognitionSettings.minConfidence) storedAWSRekognitionSettings.minConfidence = 95;
+  dispatch(SET_AWS_REKOGNITION_SETTINGS(storedAWSRekognitionSettings));
 }
 
 /* Store */

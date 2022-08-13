@@ -3,6 +3,10 @@ export interface IAWSCredentials {
   awsSecretAccessKey: string;
 }
 
+export interface IAWSRekognitionSettings {
+  minConfidence: number;
+}
+
 export interface IRekognitionFile {
   id: number,
   name: string,

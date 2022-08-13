@@ -1,4 +1,4 @@
-import { IAWSCredentials, IRekognitionFile } from '../interfaces';
+import { IAWSCredentials, IAWSRekognitionSettings, IRekognitionFile } from '../interfaces';
 
 declare global {
   interface Window {
@@ -14,6 +14,8 @@ declare global {
       unsubscribeAllOnExiftoolTagProgress(): void,
       unsubscribeAllOnExifToolTagFinish(): void,
       onError(callback): void,
+      setAWSRekognitionSettings(settings: IAWSRekognitionSettings): void,
+      getAWSRekognitionSettings(): IAWSRekognitionSettings,
     };
   }
 }
