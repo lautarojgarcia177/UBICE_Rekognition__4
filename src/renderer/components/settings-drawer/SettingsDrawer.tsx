@@ -2,15 +2,12 @@ import { SettingsIcon } from '@chakra-ui/icons';
 import {
   Drawer,
   DrawerBody,
-  DrawerFooter,
   DrawerHeader,
   DrawerOverlay,
   DrawerContent,
   DrawerCloseButton,
   useDisclosure,
   IconButton,
-  VStack,
-  Center,
   Flex,
 } from '@chakra-ui/react';
 import React from 'react';
