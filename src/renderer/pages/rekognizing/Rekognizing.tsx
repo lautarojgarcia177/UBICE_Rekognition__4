@@ -31,7 +31,6 @@ function ProcessProgress(props: ProcessProgressProps) {
 const Rekognizing = () => {
   const navigate = useNavigate();
   const [rekognitionProgress, setRekognitionProgress] = useState(0);
-  const [exifToolTaggingProgress, setexifToolTaggingProgress] = useState(0);
   const [progressCount, setProgressCount] = useState(0);
   const toast = useToast();
   const dispatch = useDispatch();
@@ -41,16 +40,11 @@ const Rekognizing = () => {
     window.electron.onRekognitionProgress((_event, progress) => {
       rekognitionProgressHandler(progress);
     });
-    window.electron.onExifToolTagProgress((_event, progress) => {
-      exifToolTaggingProgressHandler(progress);
-    });
-    window.electron.onExifToolTagFinish(() => {
-      handleExifToolTagFinish();
+    window.electron.onRekognitionFinish(() => {
+      handleRekognitionFinish();
     });
     return () => {
       window.electron.unsubscribeAllOnRekognitionProgress();
-      window.electron.unsubscribeAllOnExiftoolTagProgress();
-      window.electron.unsubscribeAllOnExifToolTagFinish();
     };
   }, []);
 
@@ -58,14 +52,10 @@ const Rekognizing = () => {
     setRekognitionProgress(progress);
     updateProgressCount(progress);
   }
-  function exifToolTaggingProgressHandler(progress: number): void {
-    setexifToolTaggingProgress(progress);
-    updateProgressCount(progress);
-  }
   function updateProgressCount(progress: number) {
     setProgressCount((progress * selectedFilesLength) / 100);
   }
-  function handleExifToolTagFinish() {
+  function handleRekognitionFinish() {
     toast({
       title: 'Rekonocimiento y etiquetado finalizado',
       description:
@@ -90,11 +80,7 @@ const Rekognizing = () => {
               ? 'Rekonociendo numeros con AWS Rekognition...'
               : 'Etiquetando las imagenes con Exiftool...'
           }
-          progressValue={
-            rekognitionProgress !== 100
-              ? rekognitionProgress
-              : exifToolTaggingProgress
-          }
+          progressValue={rekognitionProgress}
         />
         <p>
           {progressCount} de {selectedFilesLength} Fotos

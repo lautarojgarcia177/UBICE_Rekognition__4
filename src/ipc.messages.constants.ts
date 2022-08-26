@@ -2,11 +2,10 @@ export const AWS__SET_CREDENTIALS = 'aws:set-credentials';
 export const AWS__GET_CREDENTIALS = 'aws:get-credentials';
 export const AWS__SET_REKOGNITION_SETTINGS = 'aws:set-rekognition-settings';
 export const AWS__GET_REKOGNITION_SETTINGS = 'aws:get-rekognition-settings';
-export const AWS__START_REKOGNITION = 'aws:start-rekognition';
-export const AWS__REKOGNITION_FINISH = 'aws:rekognition-finish';
-export const AWS__REKOGNITION_PROGRESS = 'aws:rekognition-progress';
-export const EXIFTOOL__TAGGING_PROGRESS = 'exiftool:tagging-progress';
-export const EXIFTOOL__TAGGING_FINISH = 'exiftool:tagging-finish';
+export const START_REKOGNITION = 'start-rekognition';
+export const REKOGNITION_FINISH = 'rekognition-finish';
+export const REKOGNITION_PROGRESS = 'rekognition-progress';
+export const CANCEL_REKOGNITION = 'cancel-rekognition';
 
 // Error codes
 export const APP__ERROR = 'app:error';
