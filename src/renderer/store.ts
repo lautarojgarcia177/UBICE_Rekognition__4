@@ -73,7 +73,7 @@ export function saveAwsRekognitionSettings(awsRekognitionSettings: IAWSRekogniti
 }
 export async function loadAWSRekognitionSettingsThunk(dispatch, getState) {
   const storedAWSRekognitionSettings = await window.electron.getAWSRekognitionSettings();
-  if (!storedAWSRekognitionSettings.minConfidence) storedAWSRekognitionSettings.minConfidence = 95;
+  if (!storedAWSRekognitionSettings.minConfidence || storedAWSRekognitionSettings.minConfidence == NaN) storedAWSRekognitionSettings.minConfidence = 95;
   dispatch(SET_AWS_REKOGNITION_SETTINGS(storedAWSRekognitionSettings));
 }
 

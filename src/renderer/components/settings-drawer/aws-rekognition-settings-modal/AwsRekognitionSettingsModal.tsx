@@ -73,6 +73,7 @@ export default function AwsRekognitionSettingsModal({closeDrawer}) {
               <p>
                 Establece la confianza de la detección de palabras. Las palabras con una confianza de detección inferior a esta se excluirán del resultado.
                 Tipo de dato: Número positivo entre 0 y 100, puede llevar decimales.
+                Por defecto es 95
               </p>
               <Input
                 type="text"
