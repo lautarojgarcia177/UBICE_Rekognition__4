@@ -53,7 +53,7 @@ const Rekognizing = () => {
     updateProgressCount(progress);
   }
   function updateProgressCount(progress: number) {
-    setProgressCount((progress * selectedFilesLength) / 100);
+    setProgressCount(Math.ceil(progress * selectedFilesLength) / 100));
   }
   function handleRekognitionFinish() {
     toast({
