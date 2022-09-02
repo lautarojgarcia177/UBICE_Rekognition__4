@@ -43,6 +43,7 @@ const Rekognize = () => {
         numbers: [],
       });
     }
+    console.log('Files ready for rekognizing');
     dispatch(store.UPDATE_FILES(_files));
   }
 
